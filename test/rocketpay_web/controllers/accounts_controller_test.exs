@@ -65,22 +65,6 @@ defmodule RocketpayWeb.AccountsControllerTest do
   end
 
   describe "withdraw/2" do
-    # setup %{conn: conn} do
-    #   params = %{
-    #     name: "Mateus",
-    #     password: "123456",
-    #     nickname: "mateusfg7",
-    #     email: "mateusfg7@protonmail.com",
-    #     age: 18
-    #   }
-
-    #   {:ok, %User{account: %Account{id: account_id}}} = Rocketpay.create_user(params)
-
-    #   conn = put_req_header(conn, "authorization", "Basic YmFuYW5hOm5hbmljYTEyMw==")
-
-    #   {:ok, conn: conn, account_id: account_id}
-    # end
-
     test "when all params are valid, make the deposit, after, the withdraw", %{
       conn: conn,
       account_id: account_id
