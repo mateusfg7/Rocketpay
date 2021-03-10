@@ -46,6 +46,22 @@ defmodule RocketpayWeb.AccountsControllerTest do
 
       assert response == expected_response
     end
+
+    test "when the deposit value is less than 0, returns an error", %{
+      conn: conn,
+      account_id: account_id
+    } do
+      params = %{"value" => "-50.00"}
+
+      response =
+        conn
+        |> post(Routes.accounts_path(conn, :deposit, account_id, params))
+        |> json_response(:bad_request)
+
+      expected_response = %{"message" => %{"balance" => ["is invalidd"]}}
+
+      assert response == expected_response
+    end
   end
 
   describe "withdraw/2" do
