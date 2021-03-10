@@ -3,23 +3,23 @@ defmodule RocketpayWeb.AccountsControllerTest do
 
   alias Rocketpay.{Account, User}
 
+  setup %{conn: conn} do
+    params = %{
+      name: "Mateus",
+      password: "123456",
+      nickname: "mateusfg7",
+      email: "mateusfg7@protonmail.com",
+      age: 18
+    }
+
+    {:ok, %User{account: %Account{id: account_id}}} = Rocketpay.create_user(params)
+
+    conn = put_req_header(conn, "authorization", "Basic YmFuYW5hOm5hbmljYTEyMw==")
+
+    {:ok, conn: conn, account_id: account_id}
+  end
+
   describe "deposit/2" do
-    setup %{conn: conn} do
-      params = %{
-        name: "Mateus",
-        password: "123456",
-        nickname: "mateusfg7",
-        email: "mateusfg7@protonmail.com",
-        age: 18
-      }
-
-      {:ok, %User{account: %Account{id: account_id}}} = Rocketpay.create_user(params)
-
-      conn = put_req_header(conn, "authorization", "Basic YmFuYW5hOm5hbmljYTEyMw==")
-
-      {:ok, conn: conn, account_id: account_id}
-    end
-
     test "when all params are valid, make the deposit", %{conn: conn, account_id: account_id} do
       params = %{"value" => "50.00"}
 
@@ -58,28 +58,28 @@ defmodule RocketpayWeb.AccountsControllerTest do
         |> post(Routes.accounts_path(conn, :deposit, account_id, params))
         |> json_response(:bad_request)
 
-      expected_response = %{"message" => %{"balance" => ["is invalidd"]}}
+      expected_response = %{"message" => %{"balance" => ["is invalid"]}}
 
       assert response == expected_response
     end
   end
 
   describe "withdraw/2" do
-    setup %{conn: conn} do
-      params = %{
-        name: "Mateus",
-        password: "123456",
-        nickname: "mateusfg7",
-        email: "mateusfg7@protonmail.com",
-        age: 18
-      }
+    # setup %{conn: conn} do
+    #   params = %{
+    #     name: "Mateus",
+    #     password: "123456",
+    #     nickname: "mateusfg7",
+    #     email: "mateusfg7@protonmail.com",
+    #     age: 18
+    #   }
 
-      {:ok, %User{account: %Account{id: account_id}}} = Rocketpay.create_user(params)
+    #   {:ok, %User{account: %Account{id: account_id}}} = Rocketpay.create_user(params)
 
-      conn = put_req_header(conn, "authorization", "Basic YmFuYW5hOm5hbmljYTEyMw==")
+    #   conn = put_req_header(conn, "authorization", "Basic YmFuYW5hOm5hbmljYTEyMw==")
 
-      {:ok, conn: conn, account_id: account_id}
-    end
+    #   {:ok, conn: conn, account_id: account_id}
+    # end
 
     test "when all params are valid, make the deposit, after, the withdraw", %{
       conn: conn,
@@ -143,18 +143,18 @@ defmodule RocketpayWeb.AccountsControllerTest do
   describe "transaction/2" do
     setup %{conn: conn} do
       user_a_params = %{
-        name: "Mateus",
+        name: "Person A",
         password: "123456",
-        nickname: "mateusfg7",
-        email: "mateusfg7@protonmail.com",
+        nickname: "person_a",
+        email: "person_a@email.com",
         age: 18
       }
 
       user_b_params = %{
-        name: "Felipe",
+        name: "Person B",
         password: "654321",
-        nickname: "mateusfg8",
-        email: "mateusfg7@gmail.com",
+        nickname: "person_b",
+        email: "person_b@email.com",
         age: 18
       }
 
