@@ -85,6 +85,25 @@ defmodule RocketpayWeb.AccountsControllerTest do
              } = response
     end
 
+    test "when the withdraw value is greather than the balance, return an error", %{
+      conn: conn,
+      account_id: account_id
+    } do
+      deposit_params = %{"value" => "50.00"}
+      withdraw_params = %{"value" => "100.00"}
+
+      conn |> post(Routes.accounts_path(conn, :deposit, account_id, deposit_params))
+
+      response =
+        conn
+        |> post(Routes.accounts_path(conn, :withdraw, account_id, withdraw_params))
+        |> json_response(:bad_request)
+
+      expected_response = %{"message" => %{"balance" => ["is invalid"]}}
+
+      assert response == expected_response
+    end
+
     test "when there are invalid params, return an error", %{
       conn: conn,
       account_id: account_id
@@ -99,7 +118,9 @@ defmodule RocketpayWeb.AccountsControllerTest do
         |> post(Routes.accounts_path(conn, :withdraw, account_id, withdraw_params))
         |> json_response(:bad_request)
 
-      assert %{"message" => "Invalid deposit value!"} = response
+      expected_response = %{"message" => "Invalid deposit value!"}
+
+      assert response == expected_response
     end
   end
 
