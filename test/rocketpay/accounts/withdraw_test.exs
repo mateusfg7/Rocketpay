@@ -38,7 +38,7 @@ defmodule Rocketpay.Accounts.WithdrawTest do
 
       {:error, changeset} = Withdraw.call(params)
 
-      expected_response = %{balance: ["is invalidd"]}
+      expected_response = %{balance: ["is invalid"]}
 
       assert errors_on(changeset) == expected_response
     end
